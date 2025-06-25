@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NINO Validator - Browser Compatibility Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .test-result {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .pass { background: #d4edda; color: #155724; }
+        .fail { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .input-test {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .input-test input {
+            width: 200px;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .input-test button {
+            padding: 8px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .input-test button:hover {
+            background: #0056b3;
+        }
+        #results {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 3px;
+            min-height: 20px;
+        }
+        .performance-test {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇬🇧 NINO Validator - Browser Compatibility Test</h1>
+        
+        <div class="test-section">
+            <h3>📋 Environment Information</h3>
+            <div id="env-info"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 Function Availability Tests</h3>
+            <div id="function-tests"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>✅ Basic Validation Tests</h3>
+            <div id="validation-tests"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Enhanced Error Handling Tests</h3>
+            <div id="error-tests"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📱 Interactive Test</h3>
+            <div class="input-test">
+                <input type="text" id="nino-input" placeholder="Enter NINO (e.g., AB123456C)" value="AB123456C">
+                <button onclick="testUserInput()">Validate</button>
+                <button onclick="testUserInputDetails()">Validate with Details</button>
+                <button onclick="formatUserInput()">Format</button>
+                <button onclick="parseUserInput()">Parse</button>
+            </div>
+            <div id="results"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>⚡ Performance Test</h3>
+            <div class="performance-test">
+                <button onclick="runPerformanceTest()">Run Performance Test</button>
+                <div id="performance-results"></div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🎲 Random Generation Test</h3>
+            <button onclick="generateRandomNINOs()">Generate 10 Random NINOs</button>
+            <div id="random-results"></div>
+        </div>
+    </div>
+
+    <!-- Load the NINO Validator -->
+    <script src="../index.js"></script>
+    
+    <script>
+        // Test functions
+        function displayResult(elementId, tests) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = tests.map(test => 
+                `<div>${test.name}: <span class="test-result ${test.pass ? 'pass' : 'fail'}">${test.pass ? '✅ PASS' : '❌ FAIL'}</span> ${test.details || ''}</div>`
+            ).join('');
+        }
+
+        function runEnvironmentTests() {
+            const info = [
+                `Browser: ${navigator.userAgent}`,
+                `Platform: ${navigator.platform}`,
+                `Language: ${navigator.language}`,
+                `Online: ${navigator.onLine ? 'Yes' : 'No'}`,
+                `Cookies Enabled: ${navigator.cookieEnabled ? 'Yes' : 'No'}`,
+                `Screen: ${screen.width}x${screen.height}`,
+                `Viewport: ${window.innerWidth}x${window.innerHeight}`,
+                `Date: ${new Date().toISOString()}`
+            ];
+            
+            document.getElementById('env-info').innerHTML = info.map(item => 
+                `<div class="info">${item}</div>`
+            ).join('');
+        }
+
+        function runFunctionTests() {
+            const functions = ['validateNINO', 'validateNINOWithDetails', 'formatNINO', 'parseNINO', 'generateRandomNINO'];
+            const tests = functions.map(funcName => ({
+                name: `${funcName} function exists`,
+                pass: typeof window[funcName] === 'function',
+                details: typeof window[funcName] === 'function' ? '' : `(found: ${typeof window[funcName]})`
+            }));
+            
+            displayResult('function-tests', tests);
+        }
+
+        function runValidationTests() {
+            const testCases = [
+                { input: 'AB123456C', expected: true, description: 'Valid NINO with suffix' },
+                { input: 'AB123456', expected: true, description: 'Valid NINO without suffix' },
+                { input: 'ab123456c', expected: true, description: 'Valid NINO (lowercase)' },
+                { input: 'AB 12 34 56 C', expected: true, description: 'Valid NINO with spaces' },
+                { input: 'BG123456C', expected: false, description: 'Invalid prefix' },
+                { input: 'AB111111C', expected: false, description: 'Invalid repeated digits' },
+                { input: 'AB123456D', expected: false, description: 'Invalid suffix' },
+                { input: 'invalid', expected: false, description: 'Completely invalid' },
+                { input: '', expected: false, description: 'Empty string' },
+                { input: null, expected: false, description: 'Null input' }
+            ];
+
+            const tests = testCases.map(testCase => {
+                let result;
+                result = typeof validateNINO === 'function' ? validateNINO(testCase.input) : false;
+                    result = false;
+                }
+                
+                return {
+                    name: testCase.description,
+                    pass: result === testCase.expected,
+                    details: `(input: "${testCase.input}", expected: ${testCase.expected}, got: ${result})`
+                };
+            });
+
+            displayResult('validation-tests', tests);
+        }
+
+        function runErrorHandlingTests() {
+            const tests = [];
+            
+            // Test validateNINOWithDetails exists and works
+            try {
+                const result = validateNINOWithDetails('AB123456C');
+                tests.push({
+                    name: 'validateNINOWithDetails returns object',
+                    pass: typeof result === 'object' && result !== null,
+                    details: ''
+                });
+                
+                tests.push({
+                    name: 'Valid input returns success',
+                    pass: result.isValid === true && result.error === null,
+                    details: ''
+                });
+            } catch (e) {
+                tests.push({
+                    name: 'validateNINOWithDetails basic functionality',
+                    pass: false,
+                    details: `Error: ${e.message}`
+                });
+            }
+
+            // Test error cases
+            try {
+                const errorResult = validateNINOWithDetails('BG123456C');
+                tests.push({
+                    name: 'Invalid input returns error details',
+                    pass: errorResult.isValid === false && typeof errorResult.error === 'string' && typeof errorResult.errorCode === 'string',
+                    details: ''
+                });
+            } catch (e) {
+                tests.push({
+                    name: 'Error handling works',
+                    pass: false,
+                    details: `Error: ${e.message}`
+                });
+            }
+
+            displayResult('error-tests', tests);
+        }
+
+        function testUserInput() {
+            const input = document.getElementById('nino-input').value;
+            const result = validateNINO(input);
+            document.getElementById('results').innerHTML = `
+                <strong>Validation Result:</strong> ${result ? '✅ Valid' : '❌ Invalid'}
+            `;
+        }
+
+        function testUserInputDetails() {
+            const input = document.getElementById('nino-input').value;
+            const result = validateNINOWithDetails(input);
+            document.getElementById('results').innerHTML = `
+                <strong>Detailed Validation Result:</strong><br>
+                Valid: ${result.isValid ? '✅ Yes' : '❌ No'}<br>
+                ${result.error ? `Error: ${result.error}<br>` : ''}
+                ${result.errorCode ? `Error Code: ${result.errorCode}<br>` : ''}
+                ${result.suggestion ? `Suggestion: ${result.suggestion}<br>` : ''}
+            `;
+        }
+
+        function formatUserInput() {
+            const input = document.getElementById('nino-input').value;
+            const result = formatNINO(input);
+            document.getElementById('results').innerHTML = `
+                <strong>Format Result:</strong> ${result || 'null (invalid input)'}
+            `;
+        }
+
+        function parseUserInput() {
+            const input = document.getElementById('nino-input').value;
+            const result = parseNINO(input);
+            if (result) {
+                document.getElementById('results').innerHTML = `
+                    <strong>Parse Result:</strong><br>
+                    Prefix: ${result.prefix}<br>
+                    Numbers: ${result.numbers}<br>
+                    Suffix: ${result.suffix || 'none'}<br>
+                    Formatted: ${result.formatted}<br>
+                    Original: ${result.original}
+                `;
+            } else {
+                document.getElementById('results').innerHTML = `
+                    <strong>Parse Result:</strong> null (invalid input)
+                `;
+            }
+        }
+
+        function runPerformanceTest() {
+            const iterations = 10000;
+            const testNINO = 'AB123456C';
+            
+            document.getElementById('performance-results').innerHTML = 'Running performance test...';
+            
+            // Use setTimeout to prevent blocking the UI
+            setTimeout(() => {
+                const start = performance.now();
+                
+                for (let i = 0; i < iterations; i++) {
+                    validateNINO(testNINO);
+                }
+                
+                const end = performance.now();
+                const duration = end - start;
+                const opsPerSecond = Math.round((iterations / duration) * 1000);
+                
+                document.getElementById('performance-results').innerHTML = `
+                    <div><strong>Performance Test Results:</strong></div>
+                    <div>Iterations: ${iterations.toLocaleString()}</div>
+                    <div>Duration: ${duration.toFixed(2)}ms</div>
+                    <div>Operations/second: ${opsPerSecond.toLocaleString()}</div>
+                    <div>Average time/operation: ${(duration / iterations).toFixed(4)}ms</div>
+                `;
+            }, 10);
+        }
+
+        function generateRandomNINOs() {
+            const ninos = [];
+            const validationResults = [];
+            
+            for (let i = 0; i < 10; i++) {
+                const nino = generateRandomNINO();
+                const isValid = validateNINO(nino);
+                ninos.push(nino);
+                validationResults.push(isValid);
+            }
+            
+            const allValid = validationResults.every(result => result === true);
+            
+            document.getElementById('random-results').innerHTML = `
+                <div><strong>Generated NINOs:</strong></div>
+                ${ninos.map((nino, i) => `<div>${i + 1}. ${nino} ${validationResults[i] ? '✅' : '❌'}</div>`).join('')}
+                <div style="margin-top: 10px;"><strong>All Valid:</strong> ${allValid ? '✅ Yes' : '❌ No'}</div>
+            `;
+        }
+
+        // Run tests on page load
+        window.onload = function() {
+            runEnvironmentTests();
+            runFunctionTests();
+            runValidationTests();
+            runErrorHandlingTests();
+        };
+    </script>
+</body>
+</html> 
