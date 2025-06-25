@@ -1,0 +1,63 @@
+{
+  "name": "nino-validator",
+  "version": "1.0.0",
+  "description": "A lightweight npm package for validating UK National Insurance Numbers (NINO)",
+  "main": "index.js",
+  "module": "index.mjs",
+  "types": "index.d.ts",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./index.mjs"
+      },
+      "require": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "jest test/",
+    "test:watch": "jest --watch test/",
+    "test:coverage": "jest --coverage test/",
+    "test:esm": "node test-esm/esm.test.mjs",
+    "test:all": "npm test && npm run test:esm",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "benchmark": "node benchmark/performance.js",
+    "benchmark:ci": "node benchmark/ci-benchmark.js",
+    "benchmark:memory": "node --expose-gc benchmark/performance.js",
+    "prepublishOnly": "npm run test:all && npm run lint",
+    "docs": "echo 'See README.md for documentation'",
+    "validate": "npm run lint && npm run test:coverage && npm run test:esm && npm run benchmark:ci"
+  },
+  "keywords": [
+    "nino",
+    "national-insurance",
+    "uk",
+    "validator",
+    "validation",
+    "government",
+    "identity"
+  ],
+  "author": "Byron Thanopoulos <byron.thanopoulos@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/icodenet/nino-validator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/icodenet/nino-validator/issues"
+  },
+  "homepage": "https://github.com/icodenet/nino-validator#readme",
+  "devDependencies": {
+    "jest": "^30.0.3",
+    "eslint": "9.29.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -1,0 +1,48 @@
+# Development files
+.history/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test files
+test/
+test-esm/
+coverage/
+
+# Build and development artifacts
+.nyc_output/
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Configuration files for development only
+.eslintrc*
+.prettierrc*
+.editorconfig
+
+# Git files
+.git/
+.gitignore
+
+# CI files
+.github/
+.travis.yml
+.circleci/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env*
+
+# Temporary files
+tmp/
+temp/

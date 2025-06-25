@@ -1,0 +1,3 @@
+test-esm/
+*.mjs
+node_modules/
